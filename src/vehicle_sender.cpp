@@ -115,13 +115,15 @@ void ControlCommand::actuation_callback(const autoware_control_msgs::msg::Contro
   }
 
   if (is_drive_ == true) {
-    throttle_cmd_ = (msg->longitudinal.velocity * 100.0) / max_velocity_; // scale 0 to 100
+    // Scale 0 to 100 where 50 is neutral
+    throttle_cmd_ = 50.0 + (msg->longitudinal.velocity * 50.0) / max_velocity_; 
     RCLCPP_INFO(get_logger(), "Throttle: %f, msg_velo %f", throttle_cmd_, msg->longitudinal.velocity);
   } else if (is_reverse_ == true) {
-    throttle_cmd_ = -(msg->longitudinal.velocity * 100.0) / max_velocity_; // scale 0 to -100
+    // Scale 0 to 100 where 50 is neutral
+    throttle_cmd_ = 50.0 - (msg->longitudinal.velocity * 50.0) / max_velocity_; 
     RCLCPP_INFO(get_logger(), "Throttle: %f, msg_velo %f", throttle_cmd_, msg->longitudinal.velocity);
   } else {
-    throttle_cmd_ = 0.0;
+    throttle_cmd_ = 50.0; // Neutral
   }
 }
 

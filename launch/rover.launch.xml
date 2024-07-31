@@ -6,6 +6,12 @@
     
   </node>
 
+  <node pkg="rover_interface" exec="vehicle_receiver" name="vehicle_receiver" output="screen">
+    <remap from="/input/throttle" to="throttle_send"/>
+    <remap from="/input/steering" to="steering_send"/>
+    
+  </node>
+
   <node pkg="rover_interface" exec="sender_bridge" name="sender_bridge" output="screen">
     <remap from="throttle_pub" to="throttle_send"/>
     <remap from="steering_pub" to="steering_send"/>

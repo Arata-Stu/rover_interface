@@ -29,7 +29,7 @@ ament_target_dependencies(vehicle_sender
 )
 
 #receiver
-add_executable(vehicle_receiver src/vehicle_sender.cpp)
+add_executable(vehicle_receiver src/vehicle_receiver.cpp)
 
 target_link_libraries(vehicle_receiver
   ${CANLIB_LIBRARY}
@@ -57,6 +57,8 @@ ament_target_dependencies(sender_bridge
 )
 
 install(TARGETS sender_bridge
+  vehicle_sender
+  vehicle_receiver
   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY

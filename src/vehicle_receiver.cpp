@@ -35,7 +35,7 @@ private:
     rclcpp::TimerBase::SharedPtr timer_;
 };
 
-VehicleReport::VehicleReport() : Node("canedudev_vehicle_report_node")
+VehicleReport::VehicleReport() : Node("canedudev_vehicle_report_node"), throttle_value_(50.0) // Initialize throttle_value_ to 50
 {
     frame_id_  = declare_parameter("frame_id", "base_link");
     loop_rate_ = declare_parameter("loop_rate", 50.0);
