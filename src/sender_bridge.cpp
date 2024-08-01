@@ -41,8 +41,13 @@ private:
         if (msg->buttons[4] == 1)
         {
             override_active_ = true;
-            joy_steer_ = scale_steering(msg->axes[0]); // Joyのx軸をステアリングに使用し逆にする
-            joy_throttle_ = scale_throttle(msg->axes[1]); // Joyのy軸をスロットルに使用
+            joy_steer_ = scale_steering(msg->axes[0]); // 左スティックのx軸をステアリングに使用
+            joy_throttle_ = scale_throttle(msg->axes[3]); // 右スティックのy軸をスロットルに使用
+
+            // デバッグメッセージの追加
+            RCLCPP_INFO(this->get_logger(), "Joy input - Steering: %f, Throttle: %f", msg->axes[0], msg->axes[4]);
+            RCLCPP_INFO(this->get_logger(), "Scaled values - Steering: %f, Throttle: %f", joy_steer_, joy_throttle_);
+            
             publish_control_values(joy_throttle_, joy_steer_);
         }
         else
@@ -92,10 +97,14 @@ private:
         steering_pub_->publish(steering_msg);
     }
 
-    // スロットルのスケーリング (-1.0〜1.0 を 0〜100 に変換)
+    // スロットルのスケーリング
     float scale_throttle(float value)
     {
-        return (value + 1.0f) * 50.0f;
+        if (value < 0.0f) { // 後退の場合
+            return 50.0f + (value * 30.0f); // -1.0から0.0を20.0から50.0にマッピング
+        } else { // 前進の場合
+            return 50.0f + (value * 50.0f); // 0.0から1.0を50.0から100.0にマッピング
+        }
     }
 
     // ステアリングのスケーリング (-1.0〜1.0 を -45〜45 度に変換)
