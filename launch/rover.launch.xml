@@ -7,7 +7,10 @@
   </node>
 
   <node pkg="rover_interface" exec="vehicle_receiver" name="vehicle_receiver" output="screen">
-    <remap from="/input/throttle" to="throttle_send"/>
+
+    <param name="loop_rate"  value="300.0" />
+    <param name="velocity_threshold"  value="0.03" />
+    <remap from="/input/velocity" to="/sensing/imu/xsens/filter/velocity"/>
     <remap from="/input/steering" to="steering_send"/>
     
   </node>
